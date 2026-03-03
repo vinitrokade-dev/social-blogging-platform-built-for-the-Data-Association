@@ -99,9 +99,22 @@ app.get('/like/:id', isLoggedIn, async (req, res) => {
     }
 });
 app.get('/edit/:id', isLoggedIn, async (req, res) => {
-        let post = await postModel.findOne({ _id: req.params.id });
-        res.render('./views/edit')
-
+    // 1. Find the post by ID
+    let post = await postModel.findOne({ _id: req.params.id });
+    
+    // 2. Pass the post object to the template
+    // Also, usually you just need 'edit', not the full path if your views folder is set up
+    res.render('edit', { post }); 
+});
+app.post('/update/:id', isLoggedIn, async (req, res) => {
+    // Find the post and update its content with the data from the form
+    await postModel.findOneAndUpdate(
+        { _id: req.params.id }, 
+        { content: req.body.content }
+    );
+    
+    // Redirect back to the profile to see the changes
+    res.redirect('/profile');
 });
 app.post('/post', isLoggedIn, async (req, res) => {
     let user = await userModel.findOne({ email: req.user.email });
