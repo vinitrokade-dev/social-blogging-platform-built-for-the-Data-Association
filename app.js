@@ -98,6 +98,11 @@ app.get('/like/:id', isLoggedIn, async (req, res) => {
         res.status(500).send("Error processing like");
     }
 });
+app.get('/edit/:id', isLoggedIn, async (req, res) => {
+        let post = await postModel.findOne({ _id: req.params.id });
+        res.render('./views/edit')
+
+});
 app.post('/post', isLoggedIn, async (req, res) => {
     let user = await userModel.findOne({ email: req.user.email });
     

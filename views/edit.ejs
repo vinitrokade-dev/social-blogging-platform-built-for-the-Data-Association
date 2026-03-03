@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-zinc-900 text-white p-10">
+    <div class="w-full flex justify-end">
+        <a class="px-3 py-2 bg-red-500 rounded-md text-sm" href="/logout">logout</a>
+    </div>
+    <h5 class="mb-5">edit your post</h5>    
+    <form action="/post" method="POST">
+        <textarea placeholder="Write what's on your mind..." name="content" class="block p-3 outline-none border-2 border-zinc-800 bg-transparent rounded-md w-1/3  mb-4"></textarea>
+        <input type="submit" class="px-3 py-2 w-40 bg-blue-500 rounded-md text-sm cursor-pointer" value="Create Post">
+    </form>
+</body>
+</html>
