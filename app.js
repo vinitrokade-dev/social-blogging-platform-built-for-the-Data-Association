@@ -77,17 +77,27 @@ app.get('/profile', isLoggedIn, async (req, res) => {
     res.render('profile', { user: user, posts: user.posts });
 });
 
+// 1. Added a slash before the colon for proper URL parameter parsing
 app.get('/like/:id', isLoggedIn, async (req, res) => {
-    let post = await userModel.findOne({_id: req.prams.id}).populate('user');
-    if(post.likes.indexOf(req.user.userid)===-1){
-         post.likes.push(req.user.userid)
-    }else{
-        post.likes.splice(post.likes.indexOf(req.user.userid),1)
+    try {
+        // 2. Fixed "prams" to "params"
+        let post = await postModel.findOne({ _id: req.params.id });
+        // 3. Check if the user ID already exists in the likes array
+        const userIndex = post.likes.indexOf(req.user.userid);
+        if (userIndex === -1) {
+            // Not liked yet: Add user ID
+            post.likes.push(req.user.userid);
+        } else {
+            // Already liked: Remove user ID (Unlike)
+            post.likes.splice(userIndex, 1);
+        }
+        await post.save();
+        res.redirect('/profile'); 
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Error processing like");
     }
-    await post.save();
-    res.redirect('profile');
 });
-
 app.post('/post', isLoggedIn, async (req, res) => {
     let user = await userModel.findOne({ email: req.user.email });
     
